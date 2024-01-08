@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.Servo;
 
 @TeleOp(name="First TeleOp")
 public class FirstTeleOp extends LinearOpMode {
@@ -14,6 +15,11 @@ public class FirstTeleOp extends LinearOpMode {
     public DcMotor backLeft;
     public DcMotor backRight;
 
+    public Servo claw;
+
+    public final double CLAW_UP = 0.0;
+
+    public final double CLAW_DOWN = 0.0;
 
     @Override
     public void runOpMode() {
@@ -22,6 +28,7 @@ public class FirstTeleOp extends LinearOpMode {
         frontRight = hardwareMap.get(DcMotor.class, "FR");
         backLeft = hardwareMap.get(DcMotor.class, "BL");
         backRight = hardwareMap.get(DcMotor.class, "BR");
+        claw = hardwareMap.get(Servo.class, "CLAW");
 
         //Sets motors to not use encoders
         frontLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
@@ -32,6 +39,8 @@ public class FirstTeleOp extends LinearOpMode {
         //Reverses right side motors
         frontRight.setDirection(DcMotor.Direction.REVERSE);
         backRight.setDirection(DcMotor.Direction.REVERSE);
+
+        boolean clawUp = false;
 
         waitForStart();
 
@@ -46,6 +55,14 @@ public class FirstTeleOp extends LinearOpMode {
             backLeft.setPower(drive - strafe + spin);
             backRight.setPower(drive + strafe -spin);
 
+            if(gamepad1.a){
+                if(clawUp){
+                    claw.setPosition(CLAW_UP);
+                }
+                else{
+                    claw.setPosition(CLAW_DOWN);
+                }
+            }
 
 
         }
